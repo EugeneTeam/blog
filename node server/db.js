@@ -1,23 +1,74 @@
 const Sequelize = require('sequelize');
 const db = new Sequelize('mysql://user:password@localhost:3000/blog');
 
-const category = Sequelize.define('category', {
-    id:             Sequelize.INTEGER,
-    name:           Sequelize.STRING
+const category = db.define('category', {
+    id:             {
+        type: Sequelize.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    name:           {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
 });
 
-const article = Sequelize.define('article', {
-    id:             Sequelize.INTEGER,
-    title:          Sequelize.STRING,
-    text:           Sequelize.TEXT,
-    category_id:    Sequelize.STRING,
-    image_url:      Sequelize.STRING
+db.sync();
+
+const article = db.define('article', {
+    id:             {
+        type: Sequelize.INTEGER.UNSIGNED, 
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    title:          {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    text:           {
+        type: Sequelize.TEXT,
+        allowNull: false
+    },
+    category_id:    {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    image_url:      {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
 });
 
-const comments = Sequelize.define('comments', {
-    id:             Sequelize.INTEGER,
-    article_id:     Sequelize.INTEGER,
-    parent_id:      Sequelize.INTEGER,
-    name_author:    Sequelize.STRING,
-    avatar_author:  Sequelize.STRING
+const comments = db.define('comments', {
+    id:             { 
+        type: Sequelize.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false
+    },
+    article_id:     { 
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: false
+    },
+    parent_id:      { 
+        type: Sequelize.INTEGER.UNSIGNED,
+        allowNull: false
+    },
+    name_author:    { 
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    avatar_author:  { 
+        type: Sequelize.STRING,
+        allowNull: false
+    }
 });
+
+module.exports = {
+    db,
+    category,
+    article,
+    comments
+};
