@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
-const db = new Sequelize('mysql://user:password@localhost:3000/blog');
+const db = new Sequelize('mysql://user:password@localhost:3000/blog',{
+    pool: {maxIdleTime: 120000}
+});
 
 const category = db.define('category', {
     id:             {
