@@ -12,9 +12,16 @@ app.get('/category', (req,res) => {
 });
 
 app.get('/article', (req,res) => {
-    res.send('article');
+    /*res.send(db.article.findAll({
+        where: {
+            id: 1
+        }
+    }));*/
+    db.article.findAll({ where: { id: [1,2,3] } }).then(projects => {
+        res.send(projects);
+      });
+    //query
 });
-
 
 
 app.listen(port, (err) => {
