@@ -1,6 +1,10 @@
 const Sequelize = require('sequelize');
-const db = new Sequelize('mysql://user:password@localhost:3000/blog',{
-    pool: {maxIdleTime: 120000}
+const db = new Sequelize('blog', 'mysql', 'mysql',{
+    host: 'localhost',
+    dialect: 'mysql',
+    pool: {
+        maxIdleTime: 120000
+    }
 });
 
 const category = db.define('category', {
@@ -17,6 +21,13 @@ const category = db.define('category', {
 });
 
 db.sync();
+
+db.authenticate().then(() => {
+    console.log('****************************Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('**************************Unable to connect to the database:', err);
+  });
 
 const article = db.define('article', {
     id:             {

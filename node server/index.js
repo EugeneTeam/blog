@@ -12,8 +12,9 @@ app.get('/category', (req,res) => {
 });
 
 app.get('/article', (req,res) => {
-    res.send("article")
+    res.send('article');
 });
+
 
 
 app.listen(port, (err) => {
