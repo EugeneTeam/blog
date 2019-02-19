@@ -22,13 +22,6 @@ const category = db.define('category', {
 
 db.sync();
 
-db.authenticate().then(() => {
-    console.log('****************************Connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('**************************Unable to connect to the database:', err);
-  });
-
 const article = db.define('article', {
     id:             {
         type: Sequelize.INTEGER.UNSIGNED, 
@@ -78,6 +71,13 @@ const comments = db.define('comments', {
         allowNull: false
     }
 });
+
+db.authenticate().then(() => {
+    console.log('****************************Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('**************************Unable to connect to the database:', err);
+  });
 
 module.exports = {
     db,

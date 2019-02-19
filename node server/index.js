@@ -17,12 +17,13 @@ app.get('/article', (req,res) => {
             id: 1
         }
     }));*/
-    db.article.findAll({ where: { id: [1,2,3] } }).then(projects => {
+    db.article.findAll({
+         where: { id: 1}}).then(projects => {
         res.send(projects);
       });
     //query
+    console.log('--------------------------------------------------------');
 });
-
 
 app.listen(port, (err) => {
     if(err){
