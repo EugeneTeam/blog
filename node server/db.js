@@ -2,9 +2,7 @@ const Sequelize = require('sequelize');
 const db = new Sequelize('blog', 'mysql', 'mysql',{
     host: 'localhost',
     dialect: 'mysql',
-    pool: {
-        maxIdleTime: 120000
-    }
+    
 });
 
 const category = db.define('category', {
