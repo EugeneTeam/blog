@@ -1,0 +1,26 @@
+{
+    "development": {
+        "username": "root",
+        "password": null,
+        "database": "blog",
+        "host": "127.0.0.1",
+        "seederStorage": "sequelize",
+        "dialect": "mysql"
+    },
+    "test": {
+        "username": "root",
+        "password": null,
+        "database": "blog",
+        "host": "127.0.0.1",
+        "seederStorage": "sequelize",
+        "dialect": "mysql"
+    },
+    "production": {
+        "username": "root",
+        "password": null,
+        "database": "blog",
+        "host": "127.0.0.1",
+        "seederStorage": "sequelize",
+        "dialect": "mysql"
+    }
+}
