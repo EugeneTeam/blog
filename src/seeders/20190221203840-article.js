@@ -6,7 +6,7 @@ let temp = ["With regard to article 14 of the draft, the Russian delegation clar
             "That would allow the understanding of VMS (including some text sequences) by any type of driver within any international and/or multilingual area."];
 module.exports = {
   up: (queryInterface, Sequelize) => {
-      return queryInterface.bulkInsert('articles', [
+      return queryInterface.bulkInsert('Articles', [
         {
           title: "One",
           text: temp[0],
@@ -47,6 +47,6 @@ module.exports = {
 
   down: (queryInterface, Sequelize) => {
 
-      return queryInterface.bulkDelete('articles', null, {});
+      return queryInterface.bulkDelete('Articles', null, {});
   }
 };

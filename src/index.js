@@ -12,6 +12,7 @@ app.get('/', (req, res) => {
 
 app.get('/category', (req, res) => {
     res.send('category');
+    models.Article.findById(1).then(article => console.log(article));
 });
 
 app.get('/article/:id', (req, res) => {

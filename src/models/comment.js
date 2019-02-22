@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Comment = sequelize.define('comment', {
+  const Comment = sequelize.define('Comment', {
     article_id: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Comment.associate = function(models) {
     // associations can be defined here
-    // comment.hasOne(article);
+    // Comment.hasOne(models.Article);
   };
   return Comment;
 };

@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Article = sequelize.define('articles', 
+  const Article = sequelize.define('Article',
   {
     title: { 
       type: DataTypes.STRING,
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   Article.associate = function(models) {
-    // article.hasOne(category);
+    Article.hasOne(models.Category);
   };
   return Article;
 };
