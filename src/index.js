@@ -1,20 +1,20 @@
 const express = require('express');
-const models = require('./models');
 const app = express();
+const port = 3306;
+const models = require('./models');
+const db = require('./db');
 
-const port = 3000;
+db.sync();
 
 app.get('/', (req, res) => {
     res.send("main")
 });
 
 app.get('/category', (req, res) => {
-    models.Category.findAll()
-        .then(categories => console.log(categories));
-    res.send("category")
+    res.send('category');
 });
 
-app.get('/article', (req, res) => {
+app.get('/article/:id', (req, res) => {
     res.send("article");
 });
 
