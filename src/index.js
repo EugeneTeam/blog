@@ -10,13 +10,22 @@ app.get('/', (req, res) => {
     res.send("main")
 });
 
-app.get('/category', (req, res) => {
-    res.send('category');
-    models.Article.findById(1).then(article => console.log(article));
+app.get('/category/:id', (req, res) => {
+    models.Category
+    .findById(req.params.id)
+    .then(category => res.send(category))
+    .catch(() => {
+        res.send("Not found");
+    });
 });
 
 app.get('/article/:id', (req, res) => {
-    res.send("article");
+    models.Article
+    .findById(req.params.id)
+    .then(article => res.send(article))
+    .catch(() => {
+        res.send("Not found");
+    });
 });
 
 app.listen(port, (err) => {

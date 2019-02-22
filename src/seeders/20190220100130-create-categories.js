@@ -5,23 +5,19 @@ module.exports = {
         return queryInterface.bulkInsert('Categories', [
             {
                 name: 'Lifestyle',
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                createdAt: new Date()
             },
             {
                 name: 'Photodiary',
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                createdAt: new Date()
             },
             {
                 name: 'Music',
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                createdAt: new Date()
             },
             {
                 name: 'Travel',
-                createdAt: new Date(),
-                updatedAt: new Date(),
+                createdAt: new Date()
             },
             ], {});
     },
