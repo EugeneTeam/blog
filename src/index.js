@@ -8,6 +8,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/category/:id', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     models.Category
     .findById(req.params.id)
     .then(category => res.json(category))
@@ -17,6 +22,11 @@ app.get('/category/:id', (req, res) => {
 });
 
 app.get('/article/:id', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
     models.Article
     .findById(req.params.id)
     .then(article => res.json(article))
