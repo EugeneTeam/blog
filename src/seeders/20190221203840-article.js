@@ -42,6 +42,20 @@ module.exports = {
           image_url: "test/test/image.jpg",
           createdAt: new Date()
         },
+        {
+          title: "Five",
+          text: temp[4],
+          category_id: 1,
+          image_url: "test/test/image.jpg",
+          createdAt: new Date()
+        },
+        {
+          title: "Five",
+          text: temp[4],
+          category_id: 1,
+          image_url: "test/test/image.jpg",
+          createdAt: new Date()
+        }
       ], {});
   },
 
