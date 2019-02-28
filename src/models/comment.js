@@ -19,8 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   Comment.associate = function(models) {
-    // associations can be defined here
-    // Comment.hasOne(models.Article);
+    Comment.hasOne(models.Article);
   };
   return Comment;
 };

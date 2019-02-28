@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   Article.associate = function(models) {
-    //Article.hasOne(models.Category);
+    Article.hasOne(models.Category);
+    Article.belongToMany(model.Comment);
   };
   return Article;
 };
