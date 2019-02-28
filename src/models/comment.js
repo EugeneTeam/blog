@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   Comment.associate = function(models) {
-    Comment.hasOne(models.Article);
+    Comment.belongsTo(models.Article);
   };
   return Comment;
 };
