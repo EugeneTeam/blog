@@ -2,6 +2,12 @@
 module.exports = (sequelize, DataTypes) => {
   const Article = sequelize.define('Article',
   {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER
+    },
     title: { 
       type: DataTypes.STRING,
       allowNull: false
@@ -18,7 +24,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     }
-  }, {});
+  }, 
+  {
+    foreignKey: 'category_id'
+  }, 
+  {
+    // underscored: true
+  });
   Article.associate = function(models) {
     Article.belongsTo(models.Category);
   };

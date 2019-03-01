@@ -17,7 +17,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     }
-  }, {});
+  }, 
+  {
+    // foreignKey: 'category_id'
+  }, 
+  {
+    // underscored: true
+  });
   Comment.associate = function(models) {
     Comment.belongsTo(models.Article);
   };

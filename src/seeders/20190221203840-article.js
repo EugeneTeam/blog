@@ -1,59 +1,55 @@
 'use strict';
-let temp = ["With regard to article 14 of the draft, the Russian delegation clarified that some text has been inadvertently dropped from paragraph 3 and that it was intended to track exactly the corresponding provision in article 17 of the Physical Protection Convention.",
-            "remained within square brackets to indicate that agreement had not been reached with regard to that text.",
-            "Following extensive negotiations, the meeting participants agreed to terms of reference for the special programme, although some text remained ",
-            "Some text lines, referred to as structural text lines, are used to give structure and identification to the files.",
-            "That would allow the understanding of VMS (including some text sequences) by any type of driver within any international and/or multilingual area."];
+let temp = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.";
 module.exports = {
   up: (queryInterface, Sequelize) => {
       return queryInterface.bulkInsert('Articles', [
         {
-          title: "One",
-          text: temp[0],
-          category_id: 1,
-          image_url: "test/test/image.jpg",
-          createdAt: new Date()
-        },
-        {
-          title: "Two",
-          text: temp[1],
+          title: "The perfect weekend getaway",
+          text: temp,
           category_id: 2,
-          image_url: "test/test/image.jpg",
+          image_url: "/image/image4.jpg",
           createdAt: new Date()
         },
         {
-          title: "Three",
-          text: temp[2],
+          title: "More than just a music festival ",
+          text: temp,
+          category_id: 1,
+          image_url: "/image/image1.jpg",
+          createdAt: new Date()
+        },
+        {
+          title: "Life tastes better with coffee",
+          text: temp,
+          category_id: 1,
+          image_url: "/image/image2.jpg",
+          createdAt: new Date()
+        },
+        {
+          title: "American dream",
+          text: temp,
           category_id: 2,
-          image_url: "test/test/image.jpg",
+          image_url: "/image/image3.jpg",
           createdAt: new Date()
         },
         {
-          title: "Four",
-          text: temp[3],
-          category_id: 4,
-          image_url: "test/test/image.jpg",
+          title: "A day exploring the Alps",
+          text: temp,
+          category_id: 2,
+          image_url: "/image/image5.jpg",
           createdAt: new Date()
         },
         {
-          title: "Five",
-          text: temp[4],
+          title: "Top 10 song for running",
+          text: temp,
           category_id: 1,
-          image_url: "test/test/image.jpg",
+          image_url: "/image/image1.jpg",
           createdAt: new Date()
         },
         {
-          title: "Five",
-          text: temp[4],
+          title: "Cold winter days",
+          text: temp,
           category_id: 1,
-          image_url: "test/test/image.jpg",
-          createdAt: new Date()
-        },
-        {
-          title: "Five",
-          text: temp[4],
-          category_id: 1,
-          image_url: "test/test/image.jpg",
+          image_url: "/image/image2.jpg",
           createdAt: new Date()
         }
       ], {});
