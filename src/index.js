@@ -7,16 +7,22 @@ app.get('/', (req, res) => {
     res.send("main")
 });
 
-app.get('/category/:id', (req, res) => {
+app.use('/category/:id', (req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', true);
-    console.log("!!!!!!  ==== " + models.Category);
-    console.log("id = " + req.params.id);
-    models.Category
-    .findById(req.params.id)
+    next();
+})
+app.get('/category/:id', (req, res) => {
+    console.log('/category/:id')
+    models.Article.findAll({
+        include: [{model: models.Category}],
+        where: {
+            category_id: req.params.id
+        }
+    })
     .then(category => res.json(category))
     .catch(() => {
         res.send("Not found");
@@ -24,14 +30,20 @@ app.get('/category/:id', (req, res) => {
 });
 
 app.get('/article/:id', (req, res) => {
+    console.log('/article/:id')
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', true);
-    models.Article
-    .findById(req.params.id)
-    .then(article => res.json(article))
+
+    models.Article.findAll({
+        include: [{model: models.Category}],
+        where: {
+            id: models.Category.category_id,
+            id: req.params.id
+        }
+    }).then(article => res.json(article))
     .catch(() => {
         res.send("Not found");
     });

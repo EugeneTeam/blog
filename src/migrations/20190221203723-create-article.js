@@ -20,7 +20,8 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: 'Categories'
+          model: 'Categories',
+          key: 'id'
         }
       },
       image_url: { // avatar_author
