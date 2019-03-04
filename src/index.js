@@ -31,12 +31,6 @@ app.get('/category/:id', (req, res) => {
 
 app.get('/article/:id', (req, res) => {
     console.log('/article/:id')
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
     models.Article.findAll({
         include: [{model: models.Category}],
         where: {
@@ -48,6 +42,21 @@ app.get('/article/:id', (req, res) => {
         res.send("Not found");
     });
 });
+
+app.use('/comment', (req, res, next) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+})
+app.get('/comment', (req, res) => {
+    console.log('/comment')
+    res.send('comment')
+    console.log("BODY = = = = "+res.body);
+});
+
 
 app.listen(port, (err) => {
     if (err) {
