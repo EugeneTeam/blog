@@ -13,13 +13,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    message: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     avatar_author: {
       type: DataTypes.STRING,
       allowNull: false
     }
   }, 
   {
-    // foreignKey: 'category_id'
+     foreignKey: 'article_id'
   }, 
   {
     // underscored: true
