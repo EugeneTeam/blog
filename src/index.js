@@ -58,7 +58,7 @@ app.use('/article/:id', (req, res, next) => {
 app.get('/article/:id', (req, res) => {
     console.log('/article/:id')
     models.Article.findAll({
-        include: [{model: models.Category}],
+        include: [{model: models.Category}, {model: models.Comment}],
         where: {
             id: models.Category.category_id,
             id: req.params.id
@@ -79,12 +79,10 @@ app.use('/comment', (req, res, next) => {
 })
 
 app.post('/comment', (req, res) => {
-    console.log('/comment')
     if(!req.body) {
         return res.sendStatus(400);
     }
 
-    console.log('11111111111  === === === '+req.body.article_id)
 
     sequelize.define('Comment', {
         article_id: {
@@ -109,7 +107,7 @@ app.post('/comment', (req, res) => {
         }
       }).build({
         article_id: req.body.article_id,
-        parent_id: req.body.parent_id,
+        parent_id: req.body.parent,
         name_author: req.body.name,
         avatar_author: req.body.avatar,
         message: req.body.text,

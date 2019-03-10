@@ -6,33 +6,39 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      field: 'id'
     },
     title: { 
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      field: 'title'
     },
     text: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: false,
+      field: 'text'
     },
     category_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      field: 'category_id'
     },
     image_url: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      field: 'image_url'
     }
-  }, 
+  },
   {
     foreignKey: 'category_id'
-  }, 
+  },
   {
-    // underscored: true
+    underscored: true
   });
   Article.associate = function(models) {
     Article.belongsTo(models.Category);
+    Article.hasMany(models.Comment);
   };
   return Article;
 };

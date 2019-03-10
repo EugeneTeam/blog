@@ -6,8 +6,8 @@ module.exports = {
         article_id: 1,
         parent_id: null,
         name_author: 'Jon',
-        avatar_author: '../testpath/test.jpg',
-        message: 'Good blog man!',
+        avatar_author: '/image/avatar/2.png',
+        message: 'Good job!',
         createdAt: new Date()
       }], {});
   },
