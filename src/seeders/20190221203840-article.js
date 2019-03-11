@@ -6,50 +6,50 @@ module.exports = {
         {
           title: "The perfect weekend getaway",
           text: temp,
-          category_id: 2,
-          image_url: "/image/image4.jpg",
+          categoryId: 2,
+          imageUrl: "/image/image4.jpg",
           createdAt: new Date()
         },
         {
           title: "More than just a music festival ",
           text: temp,
-          category_id: 1,
-          image_url: "/image/image1.jpg",
+          categoryId: 1,
+          imageUrl: "/image/image1.jpg",
           createdAt: new Date()
         },
         {
           title: "Life tastes better with coffee",
           text: temp,
-          category_id: 1,
-          image_url: "/image/image2.jpg",
+          categoryId: 1,
+          imageUrl: "/image/image2.jpg",
           createdAt: new Date()
         },
         {
           title: "American dream",
           text: temp,
-          category_id: 2,
-          image_url: "/image/image3.jpg",
+          categoryId: 2,
+          imageUrl: "/image/image3.jpg",
           createdAt: new Date()
         },
         {
           title: "A day exploring the Alps",
           text: temp,
-          category_id: 2,
-          image_url: "/image/image5.jpg",
+          categoryId: 2,
+          imageUrl: "/image/image5.jpg",
           createdAt: new Date()
         },
         {
           title: "Top 10 song for running",
           text: temp,
-          category_id: 1,
-          image_url: "/image/image1.jpg",
+          categoryId: 1,
+          imageUrl: "/image/image1.jpg",
           createdAt: new Date()
         },
         {
           title: "Cold winter days",
           text: temp,
-          category_id: 1,
-          image_url: "/image/image2.jpg",
+          categoryId: 1,
+          imageUrl: "/image/image2.jpg",
           createdAt: new Date()
         }
       ], {});

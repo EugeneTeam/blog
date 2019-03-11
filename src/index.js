@@ -37,7 +37,7 @@ app.get('/category/:id', (req, res) => {
     models.Article.findAll({
         include: [{model: models.Category}],
         where: {
-            category_id: req.params.id
+            categoryId: req.params.id
         }
     })
     .then(category => res.json(category))
@@ -60,15 +60,59 @@ app.get('/article/:id', (req, res) => {
     models.Article.findAll({
         include: [{model: models.Category}, {model: models.Comment}],
         where: {
-            id: models.Category.category_id,
+            id: models.Category.categoryId,
             id: req.params.id
         }
-    }).then(article => res.json(article))
-    .catch(() => {
-        res.send("Not found");
+    }).then(article => {
+        let data = {
+            CategoryId: article[0].CategoryId,
+            categoryId: article[0].categoryId,
+            createdAt: article[0].createdAt,
+            id: article[0].id,
+            imageUrl: article[0].imageUrl,
+            text: article[0].text,
+            title: article[0].title,
+            updatedAt: article[0].updatedAt,
+            Comment: [],
+            category: [{
+                createdAt: article[0].Category.createdAt,
+                id: article[0].Category.id,
+                name: article[0].Category.name,
+                updatedAt: article[0].Category.updatedAt
+            }]
+        }
+
+
+        parsJson(article, data, 0);
+        res.send(JSON.stringify(data));
+        // res.json(article)
     });
+    // .catch(() => {
+    //     res.send("Not found");
+    // });
 });
 
+
+function parsJson(article, data, i) {
+    if(i == article[0].Comments.length) return;
+    for (let l = 0; l < article[0].Comments.length; l++) {
+        if(article[0].Comments[i].id == article[0].Comments[l].parentId) {
+            data.Comment[i] = {
+                    ArticleId: article[0].Comments[i].ArticleId,
+                    articleId: article[0].Comments[i].articleId,
+                    avatarAuthor: article[0].Comments[i].avatarAuthor,
+                    createdAt: article[0].Comments[i].createdAt,
+                    id: article[0].Comments[i].id,
+                    message: article[0].Comments[i].message,
+                    nameAuthor: article[0].Comments[i].nameAuthor,
+                    parentId: article[0].Comments[i].parentId,
+                    updatedAt: article[0].Comments[i].updatedAt,
+                    Comment:[]
+                };
+            return parsJson(article, data.Comment[i], ++i);
+        }
+    }
+}
 app.use('/comment', (req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -85,15 +129,15 @@ app.post('/comment', (req, res) => {
 
 
     sequelize.define('Comment', {
-        article_id: {
+        articleId: {
           type: Sequelize.INTEGER,
           allowNull: false
         },
-        parent_id: {
+        parentId: {
           type: Sequelize.INTEGER,
           allowNull: true
         },
-        name_author: {
+        nameAuthor: {
           type: Sequelize.STRING,
           allowNull: false
         },
@@ -101,15 +145,15 @@ app.post('/comment', (req, res) => {
             type: Sequelize.STRING,
             allowNull: false
         },
-        avatar_author: {
+        avatarAuthor: {
           type: Sequelize.STRING,
           allowNull: false
         }
       }).build({
-        article_id: req.body.article_id,
-        parent_id: req.body.parent,
-        name_author: req.body.name,
-        avatar_author: req.body.avatar,
+        articleId: req.body.articleId,
+        parentId: req.body.parent,
+        nameAuthor: req.body.name,
+        avatarAuthor: req.body.avatar,
         message: req.body.text,
         createdAt: new Date()
     }).save().then(
@@ -118,24 +162,24 @@ app.post('/comment', (req, res) => {
     );
 });
 
-app.use('/getcomments/:id', (req, res, next) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    next();
-})
-app.use('/getcomments/:id', (req, res) => {
-    models.Comment.findAll({
-        where:{
-            article_id: req.params.id
-        }
-    }).then(article => res.json(article))
-    .catch(() => {
-        res.send("Not found");
-    });
-})
+// app.use('/getcomments/:id', (req, res, next) => {
+//     res.setHeader('Content-Type', 'application/json');
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+//     next();
+// })
+// app.use('/getcomments/:id', (req, res) => {
+//     models.Comment.findAll({
+//         where:{
+//             articleId: req.params.id
+//         }
+//     }).then(article => res.json(article))
+//     .catch(() => {
+//         res.send("Not found");
+//     });
+// })
 
 app.listen(port, (err) => {
     if (err) {

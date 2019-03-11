@@ -8,23 +8,23 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      article_id: {
+      articleId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'Articles',
-          key: 'id'
+          key: 'Id'
         }
       },
-      parent_id: {
+      parentId: {
         allowNull: true,
         type: Sequelize.INTEGER
       },
-      name_author: {
+      nameAuthor: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      avatar_author: {
+      avatarAuthor: {
         allowNull: false,
         type: Sequelize.STRING
       },

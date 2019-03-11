@@ -2,29 +2,29 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Articles', {
-      id: { // id
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      title: { // article_id
+      title: {
         allowNull: false,
         type: Sequelize.STRING
       },
-      text: { // parent_id
+      text: {
         allowNull: false,
         type: Sequelize.TEXT
       },
-      category_id: { // name_author
+      categoryId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'Categories',
-          key: 'id'
+          key: 'Id'
         }
       },
-      image_url: { // avatar_author
+      imageUrl: {
         allowNull: false,
         type: Sequelize.STRING
       },

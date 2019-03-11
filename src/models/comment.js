@@ -1,37 +1,32 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Comment = sequelize.define('Comment', {
-    article_id: {
+    articleId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      field: 'article_id'
+      allowNull: false
     },
-    parent_id: {
+    parentId: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-      field: 'parent_id'
+      allowNull: true
     },
-    name_author: {
+    nameAuthor: {
       type: DataTypes.STRING,
-      allowNull: false,
-      field: 'name_author'
+      allowNull: false
     },
     message: {
       type: DataTypes.STRING,
-      allowNull: false,
-      field: 'message'
+      allowNull: false
     },
-    avatar_author: {
+    avatarAuthor: {
       type: DataTypes.STRING,
-      allowNull: false,
-      field: 'avatar_author'
+      allowNull: false
     }
   }, 
   {
-     foreignKey: 'article_id'
+    //  foreignKey: 'ArticleId'
   },
   {
-    underscored: true
+    // underscored: true
   });
   Comment.associate = function(models) {
     Comment.belongsTo(models.Article);
