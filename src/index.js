@@ -83,7 +83,7 @@ app.get('/article/:id', (req, res) => {
         }
 
 
-        parsJson(article, data, 0);
+        parserJson(article[0], data);
         res.send(JSON.stringify(data));
         // res.json(article)
     });
@@ -92,27 +92,86 @@ app.get('/article/:id', (req, res) => {
     // });
 });
 
-
-function parsJson(article, data, i) {
-    if(i == article[0].Comments.length) return;
-    for (let l = 0; l < article[0].Comments.length; l++) {
-        if(article[0].Comments[i].id == article[0].Comments[l].parentId) {
-            data.Comment[i] = {
-                    ArticleId: article[0].Comments[i].ArticleId,
-                    articleId: article[0].Comments[i].articleId,
-                    avatarAuthor: article[0].Comments[i].avatarAuthor,
-                    createdAt: article[0].Comments[i].createdAt,
-                    id: article[0].Comments[i].id,
-                    message: article[0].Comments[i].message,
-                    nameAuthor: article[0].Comments[i].nameAuthor,
-                    parentId: article[0].Comments[i].parentId,
-                    updatedAt: article[0].Comments[i].updatedAt,
-                    Comment:[]
-                };
-            return parsJson(article, data.Comment[i], ++i);
+function parserJson(art, d) {
+    let k = 0;
+    for (let l = 0; l < art.Comments.length; l++) {
+        if(art.Comments[l].parentId == null) {
+            d.Comment[k] = {
+                ArticleId: art.Comments[l].ArticleId,
+                articleId: art.Comments[l].articleId,
+                avatarAuthor: art.Comments[l].avatarAuthor,
+                createdAt: art.Comments[l].createdAt,
+                id: art.Comments[l].id,
+                message: art.Comments[l].message,
+                nameAuthor: art.Comments[l].nameAuthor,
+                parentId: art.Comments[l].parentId,
+                updatedAt: art.Comments[l].updatedAt,
+                Comment:[]
+            }
+            k++;
         }
     }
+    parserJsonNull(art, d.Comment, 0);
 }
+
+function parserJsonNull(art, d, l) {
+    if(l == d.length)return;
+    for (let i = 0; i < art.Comments.length; i++) {
+        if(d[l].id == art.Comments[i].parentId) {
+            d[l].Comment = {
+                ArticleId: art.Comments[i].ArticleId,
+                articleId: art.Comments[i].articleId,
+                avatarAuthor: art.Comments[i].avatarAuthor,
+                createdAt: art.Comments[i].createdAt,
+                id: art.Comments[i].id,
+                message: art.Comments[i].message,
+                nameAuthor: art.Comments[i].nameAuthor,
+                parentId: art.Comments[i].parentId,
+                updatedAt: art.Comments[i].updatedAt,
+                Comment:[]
+            }
+            //return parserJsonNull()
+        }
+    }
+    return parserJsonNull(art, d, ++l)
+}
+
+
+// function parsJson(article, data, i, position, tempData) {
+//     if(i == article[0].Comments.length) return;
+//     for (let l = 0; l < article[0].Comments.length; l++) {
+//         if(article[0].Comments[i].id == article[0].Comments[l].parentId) {
+//             console.log('id='+article[0].Comments[i].id)
+//             console.log('parent='+article[0].Comments[l].parentId)
+//             data.Comment[i] = {
+//                     ArticleId: article[0].Comments[i].ArticleId,
+//                     articleId: article[0].Comments[i].articleId,
+//                     avatarAuthor: article[0].Comments[i].avatarAuthor,
+//                     createdAt: article[0].Comments[i].createdAt,
+//                     id: article[0].Comments[i].id,
+//                     message: article[0].Comments[i].message,
+//                     nameAuthor: article[0].Comments[i].nameAuthor,
+//                     parentId: article[0].Comments[i].parentId,
+//                     updatedAt: article[0].Comments[i].updatedAt,
+//                     Comment:[]
+//                 };
+//             return parsJson(article, data.Comment[i], ++i, position, tempData);
+//         }
+//     }
+//     data.Comment[position] = {
+//         ArticleId: article[0].Comments[i].ArticleId,
+//         articleId: article[0].Comments[i].articleId,
+//         avatarAuthor: article[0].Comments[i].avatarAuthor,
+//         createdAt: article[0].Comments[i].createdAt,
+//         id: article[0].Comments[i].id,
+//         message: article[0].Comments[i].message,
+//         nameAuthor: article[0].Comments[i].nameAuthor,
+//         parentId: article[0].Comments[i].parentId,
+//         updatedAt: article[0].Comments[i].updatedAt,
+//         Comment:[]
+//     };
+//     return parsJson(article, tempData, ++i, position, tempData);
+// }
 app.use('/comment', (req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
