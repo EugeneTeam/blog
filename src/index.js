@@ -2,20 +2,9 @@ const express = require('express');
 const app = express();
 const port = 4000;
 const models = require('./models');
-const bodyParser = require ("body-parser"); 
+const bodyParser = require("body-parser");
+const sequelize = require('./db')
 const Sequelize = require('sequelize');
-
-const sequelize = new Sequelize('blog', 'mysql', 'mysql', {
-  host: 'localhost',
-  dialect: 'mysql',
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  },
-  operatorsAliases: false
-});
 
 app.get('/', (req, res) => {
     res.send("main")
@@ -33,17 +22,18 @@ app.use('/category/:id', (req, res, next) => {
     next();
 })
 app.get('/category/:id', (req, res) => {
-    console.log('/category/:id')
     models.Article.findAll({
-        include: [{model: models.Category}],
+        include: [{ model: models.Category }],
+        limit: 7,
+        order: [['createdAt', 'DESC']],
         where: {
             categoryId: req.params.id
         }
     })
-    .then(category => res.json(category))
-    .catch(() => {
-        res.send("Not found");
-    });
+        .then(category => res.json(category))
+        .catch(() => {
+            res.send("Not found");
+        });
 });
 
 app.use('/article/:id', (req, res, next) => {
@@ -56,9 +46,8 @@ app.use('/article/:id', (req, res, next) => {
 })
 
 app.get('/article/:id', (req, res) => {
-    console.log('/article/:id')
     models.Article.findAll({
-        include: [{model: models.Category}, {model: models.Comment}],
+        include: [{ model: models.Category }, { model: models.Comment }],
         where: {
             id: models.Category.categoryId,
             id: req.params.id
@@ -82,20 +71,18 @@ app.get('/article/:id', (req, res) => {
             }]
         }
 
-
         parserJson(article[0], data);
-        res.send(JSON.stringify(data));
-        // res.json(article)
+        let json = JSON.parse(JSON.stringify(data));
+        res.json(json)
+    }).catch(() => {
+        res.send("Not found");
     });
-    // .catch(() => {
-    //     res.send("Not found");
-    // });
 });
 
 function parserJson(art, d) {
     let k = 0;
     for (let l = 0; l < art.Comments.length; l++) {
-        if(art.Comments[l].parentId == null) {
+        if (art.Comments[l].parentId == null) {
             d.Comment[k] = {
                 ArticleId: art.Comments[l].ArticleId,
                 articleId: art.Comments[l].articleId,
@@ -106,21 +93,20 @@ function parserJson(art, d) {
                 nameAuthor: art.Comments[l].nameAuthor,
                 parentId: art.Comments[l].parentId,
                 updatedAt: art.Comments[l].updatedAt,
-                Comment:[]
+                Comment: []
             }
             k++;
         }
     }
     parserJsonNull(art, d.Comment, 0, d.Comment.length);
-
 }
 
 function parserJsonNull(art, d, l, max) {
-    if(l == max)return;
+    if (l == max) return;
     let k = 0;
     let = haveChild = false;
     for (let i = 0; i < art.Comments.length; i++) {
-        if(d[l].id == art.Comments[i].parentId) {
+        if (d[l].id == art.Comments[i].parentId) {
             d[l].Comment[k] = {
                 ArticleId: art.Comments[i].ArticleId,
                 articleId: art.Comments[i].articleId,
@@ -131,21 +117,18 @@ function parserJsonNull(art, d, l, max) {
                 nameAuthor: art.Comments[i].nameAuthor,
                 parentId: art.Comments[i].parentId,
                 updatedAt: art.Comments[i].updatedAt,
-                Comment:[]
+                Comment: []
             }
             k++;
             haveChild = true;
         }
     }
-    if(d[l].id == 5) {
-        console.log(haveChild)
-        console.log(d[l].Comment)
-    }
-    if(haveChild)
+    if (haveChild)
         return parserJsonNull(art, d[l].Comment, 0, d[l].Comment.length)
     else
         return parserJsonNull(art, d, ++l, max)
 }
+
 app.use('/comment', (req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -156,67 +139,49 @@ app.use('/comment', (req, res, next) => {
 })
 
 app.post('/comment', (req, res) => {
-    if(!req.body) {
+    if (!req.body) {
         return res.sendStatus(400);
     }
-
-
-    sequelize.define('Comment', {
+    const model = sequelize.define('Comment', {
         articleId: {
-          type: Sequelize.INTEGER,
-          allowNull: false
+            type: Sequelize.INTEGER,
+            allowNull: false
         },
         parentId: {
-          type: Sequelize.INTEGER,
-          allowNull: true
+            type: Sequelize.INTEGER,
+            allowNull: true
         },
         nameAuthor: {
-          type: Sequelize.STRING,
-          allowNull: false
+            type: Sequelize.STRING,
+            allowNull: false
         },
         message: {
             type: Sequelize.STRING,
             allowNull: false
         },
         avatarAuthor: {
-          type: Sequelize.STRING,
-          allowNull: false
+            type: Sequelize.STRING,
+            allowNull: false
         }
-      }).build({
+    });
+
+    model.build({
         articleId: req.body.articleId,
         parentId: req.body.parent,
         nameAuthor: req.body.name,
         avatarAuthor: req.body.avatar,
         message: req.body.text,
         createdAt: new Date()
-    }).save().then(
-        () => console.log('save successful'),
-        () => console.log('save error')
-    );
+    })
+        .save()
+        .then(
+            () => console.log('save successful'),
+            () => console.log('save error')
+        );
 });
-
-// app.use('/getcomments/:id', (req, res, next) => {
-//     res.setHeader('Content-Type', 'application/json');
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-//     res.setHeader('Access-Control-Allow-Credentials', true);
-//     next();
-// })
-// app.use('/getcomments/:id', (req, res) => {
-//     models.Comment.findAll({
-//         where:{
-//             articleId: req.params.id
-//         }
-//     }).then(article => res.json(article))
-//     .catch(() => {
-//         res.send("Not found");
-//     });
-// })
 
 app.listen(port, (err) => {
     if (err) {
         console.error("ERROR !!! " + err);
     }
 });
-
