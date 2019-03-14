@@ -98,13 +98,47 @@ function parserJson(art, d) {
             k++;
         }
     }
-    parserJsonNull(art, d.Comment, 0, d.Comment.length);
+    for(let i = 0; i < d.Comment.length; i++) {
+        parserJsonNull1(art, d.Comment[i], d.Comment, 0, d.Comment.length);
+    }
 }
 
-function parserJsonNull(art, d, l, max) {
+function parserJsonNull1(art, d, td, l, max) {
+    console.log(max)
     if (l == max) return;
     let k = 0;
-    let = haveChild = false;
+    let haveChild = false;
+    for (let i = 0; i < art.Comments.length; i++) {
+        if (d.id == art.Comments[i].parentId) {
+            d.Comment[k] = {
+                ArticleId: art.Comments[i].ArticleId,
+                articleId: art.Comments[i].articleId,
+                avatarAuthor: art.Comments[i].avatarAuthor,
+                createdAt: art.Comments[i].createdAt,
+                id: art.Comments[i].id,
+                message: art.Comments[i].message,
+                nameAuthor: art.Comments[i].nameAuthor,
+                parentId: art.Comments[i].parentId,
+                updatedAt: art.Comments[i].updatedAt,
+                Comment: []
+            }
+            k++;
+            haveChild = true;
+        }
+    }
+    if (haveChild) {
+        return parserJsonNull(art, d.Comment, td, 0, d.Comment.length)
+    }
+    else {
+        console.log(max)
+        return parserJsonNull(art, td, td, ++l, max)
+    }
+}
+function parserJsonNull(art, d, td, l, max) {
+    console.log(max)
+    if (l == max) return;
+    let k = 0;
+    let haveChild = false;
     for (let i = 0; i < art.Comments.length; i++) {
         if (d[l].id == art.Comments[i].parentId) {
             d[l].Comment[k] = {
@@ -123,12 +157,67 @@ function parserJsonNull(art, d, l, max) {
             haveChild = true;
         }
     }
-    if (haveChild)
-        return parserJsonNull(art, d[l].Comment, 0, d[l].Comment.length)
-    else
-        return parserJsonNull(art, d, ++l, max)
+    if (haveChild) {
+        return parserJsonNull(art, d[l].Comment, td, 0, d[l].Comment.length)
+    }
+    else {
+        console.log(max)
+        return parserJsonNull(art, td, td, ++l, max)
+    }
 }
+/*
+    {
+      "ArticleId": 1,
+      "articleId": 1,
+      "avatarAuthor": "/image/avatar/4.png",
+      "createdAt": "2019-03-13T13:46:21.000Z",
+      "id": 39,
+      "message": "4",
+      "nameAuthor": "Kyn",
+      "parentId": null,
+      "updatedAt": "2019-03-13T13:46:21.000Z",
+      "Comment": []
+    },
 
+"Comment": [
+    {
+      "ArticleId": 1,
+      "articleId": 1,
+      "avatarAuthor": "/image/avatar/1.png",
+      "createdAt": "2019-03-13T13:46:21.000Z",
+      "id": 36,
+      "message": "1",
+      "nameAuthor": "Kyn",
+      "parentId": null,
+      "updatedAt": "2019-03-13T13:46:21.000Z",
+      "Comment": []
+    },
+    {
+      "ArticleId": 1,
+      "articleId": 1,
+      "avatarAuthor": "/image/avatar/1.png",
+      "createdAt": "2019-03-13T13:46:23.000Z",
+      "id": 37,
+      "message": "2",
+      "nameAuthor": "Kyn",
+      "parentId": null,
+      "updatedAt": "2019-03-13T13:46:23.000Z",
+      "Comment": []
+    },
+    {
+      "ArticleId": 1,
+      "articleId": 1,
+      "avatarAuthor": "/image/avatar/1.png",
+      "createdAt": "2019-03-13T13:46:25.000Z",
+      "id": 38,
+      "message": "3",
+      "nameAuthor": "Kyn",
+      "parentId": null,
+      "updatedAt": "2019-03-13T13:46:25.000Z",
+      "Comment": []
+    }
+  ],
+*/
 app.use('/comment', (req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
