@@ -21,14 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     }
-  }, 
-  {
-    //  foreignKey: 'ArticleId'
-  },
-  {
-    // underscored: true
   });
-  Comment.associate = function(models) {
+  Comment.associate = function (models) {
     Comment.belongsTo(models.Article);
   };
   return Comment;
