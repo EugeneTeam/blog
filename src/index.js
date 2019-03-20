@@ -29,123 +29,95 @@ app.use(bodyParser.json());
 
 app.get('/category/:id', (req, res) => {
     models.Category.findOne({
-        include: [{ 
+        include: [{
             model: models.Article,
             limit: 7,
-         }],
+        }],
         order: [['createdAt', 'DESC']],
         where: {
             id: req.params.id
         }
     })
         .then(category => {
-            if(!category) {
+            if (!category) {
                 res.status(404);
-                res.send("Not found"); 
+                res.send("Not found");
             } else {
                 res.json(category)
             }
         })
         .catch(e => {
             console.log(e);
-            res.status(500)
-            res.send("Not found");
+            res.status(500);
+            res.send("Server Error");
         });
 });
-
 app.get('/article/:id', (req, res) => {
     models.Article.findOne({
-        include: [{ model: models.Category }, { model: models.Comment }],
+        include: [{
+            model: models.Category
+        }],
         where: {
             id: req.params.id
-        }
-    }).then(article => {
-        if(!article) {
+        },
+        raw: true,
+    }).then(async article => {
+        if (!article) {
             res.status(404);
             res.send('Not found');
+        } else {
+            const json = await models.Comment.getCommentsTree(article.id, null);
+            for (const element of json) {
+                await structureJson(element, 0, json.length, models.Comment, article.id);
+            }
+            article.Comments = json;
+            res.json(article);
         }
-
-        parserJson(article, data);
-        let json = JSON.parse(JSON.stringify(data));
-        res.json(json)
-    }).catch(() => {
-        res.send("Not found");
+    }).catch(e => {
+        console.log(e);
+        res.status(500);
+        res.send("Server Error");
     });
 });
-
-function parserJson(art, d) {
-    let k = 0;
-    for (let l = 0; l < art.Comments.length; l++) {
-        if (art.Comments[l].parentId == null) {
-            d.Comment[k] = {
-                ArticleId: art.Comments[l].ArticleId,
-                articleId: art.Comments[l].articleId,
-                avatarAuthor: art.Comments[l].avatarAuthor,
-                createdAt: art.Comments[l].createdAt,
-                id: art.Comments[l].id,
-                message: art.Comments[l].message,
-                nameAuthor: art.Comments[l].nameAuthor,
-                parentId: art.Comments[l].parentId,
-                updatedAt: art.Comments[l].updatedAt,
-                Comment: []
-            }
-            k++;
-        }
+async function structureJson(nullElement, i, max, model, id) {
+    if (i >= max) {
+        return;
     }
-    for(let i = 0; i < d.Comment.length; i++) {
-        parserJsonNull1(art, d.Comment[i], d.Comment, 0, d.Comment.length);
+    let temp = await model.getCommentsTree(id, nullElement.id)
+    if (temp != undefined) {
+        nullElement.Comments = temp;
+        return await structureJson(nullElement.Comments[i], ++i, nullElement.Comments.length, model, id)
+    } else {
+        return await structureJson(nullElement, ++i, max, model, id)
     }
 }
-
-function parserJsonNull1(art, d, td, l, max) {
-    console.log(max)
-    if (l == max) return;
-    let k = 0;
-    let haveChild = false;
-    for (let i = 0; i < art.Comments.length; i++) {
-        if (d.id == art.Comments[i].parentId) {
-            d.Comment[k] = {
-                ArticleId: art.Comments[i].ArticleId,
-                articleId: art.Comments[i].articleId,
-                avatarAuthor: art.Comments[i].avatarAuthor,
-                createdAt: art.Comments[i].createdAt,
-                id: art.Comments[i].id,
-                message: art.Comments[i].message,
-                nameAuthor: art.Comments[i].nameAuthor,
-                parentId: art.Comments[i].parentId,
-                updatedAt: art.Comments[i].updatedAt,
-                Comment: []
-            }
-            k++;
-            haveChild = true;
-        }
-    }
-    if (haveChild) {
-        return parserJsonNull(art, d.Comment, td, 0, d.Comment.length)
-    }
-    else {
-        console.log(max)
-        return parserJsonNull(art, td, td, ++l, max)
-    }
-}
-
 app.post('/comment', (req, res) => {
     if (!req.body) {
-        return res.sendStatus(400);
-    }
-    models.Comment.create({
-        articleId: req.body.articleId,
-        parentId: req.body.parent,
-        nameAuthor: req.body.name,
-        avatarAuthor: req.body.avatar,
-        message: req.body.text,
-        createdAt: new Date()
-    })
-    .then(comment => res.send(comment.id))
-        .catch(e => {
-            res.status(500);
-            res.send(e);
+        res.status(500);
+        res.send('Server Error');
+    } else {
+        models.Comment.create({
+            articleId: req.body.articleId,
+            parentId: req.body.parent,
+            nameAuthor: req.body.name,
+            avatarAuthor: req.body.avatar,
+            message: req.body.text,
+            createdAt: new Date()
         })
+            .then(comment => {
+                if (!comment) {
+                    res.status(404);
+                    res.send('Not found');
+                } else {
+                    res.send(comment.id);
+                }
+            })
+            .catch(e => {
+                console.log(e);
+                res.status(500);
+                res.send('Server Error');
+            })
+    }
 });
 
 app.listen(port, (err) => {

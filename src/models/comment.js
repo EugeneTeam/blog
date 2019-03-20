@@ -25,5 +25,26 @@ module.exports = (sequelize, DataTypes) => {
   Comment.associate = function (models) {
     Comment.belongsTo(models.Article);
   };
+
+  Comment.getCommentsTree = async (articleId, parentId) => {
+    try {
+      const comments = await Comment.findAll({
+        where: {
+          parentId: parentId,
+          articleId: articleId
+        },
+        raw: true
+      });
+      if (comments.length !== 0) {
+        return comments;
+      }
+      for (const comment of comments) {
+        comment.Comments = await Comment.getCommentsTree(articleId, parentId)
+      }
+    } catch (error) {
+      new Error('--error from comment.js--');
+    }
+  };
+
   return Comment;
 };
