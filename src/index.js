@@ -67,10 +67,12 @@ app.get('/article/:id', (req, res) => {
             res.send('Not found');
         } else {
             const json = await models.Comment.getCommentsTree(article.id, null);
-            for (const element of json) {
-                await structureJson(element, 0, json.length, models.Comment, article.id);
+            if (json) {
+                for (const element of json) {
+                    await structureJson(element, 0, json.length, models.Comment, article.id);
+                }
+                article.Comments = json;
             }
-            article.Comments = json;
             res.json(article);
         }
     }).catch(e => {
