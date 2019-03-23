@@ -88,7 +88,7 @@ async function structureJson(nullElement, i, max, model, id) {
     let temp = await model.getCommentsTree(id, nullElement.id)
     if (temp != undefined) {
         nullElement.Comments = temp;
-        return await structureJson(nullElement.Comments[i], ++i, nullElement.Comments.length, model, id)
+        return await structureJson(nullElement.Comments[i], 0, nullElement.Comments.length, model, id)
     } else {
         return await structureJson(nullElement, ++i, max, model, id)
     }
