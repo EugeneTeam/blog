@@ -49,6 +49,7 @@ app.get('/category/:id', (req, res) => {
             res.send("Server Error");
         });
 });
+
 app.get('/article/:id', (req, res) => {
     models.Article.findOne({
         include: [{
@@ -108,7 +109,7 @@ app.post('/comment', (req, res) => {
                     res.status(404);
                     res.send('Not found');
                 } else {
-                    res.send(comment.id);
+                    res.json(req.body);
                 }
             })
             .catch(e => {
@@ -118,7 +119,6 @@ app.post('/comment', (req, res) => {
             })
     }
 });
-
 app.listen(port, (err) => {
     if (err) {
         console.error("ERROR !!! " + err);
