@@ -3,15 +3,12 @@ const app = express();
 const port = 4000;
 const models = require('./models');
 const bodyParser = require("body-parser");
-
 app.use((req, res, next) => {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.setHeader('Access-Control-Allow-Credentials', true);
-
-    //intercepts OPTIONS method
     if ('OPTIONS' === req.method) {
         res.sendStatus(200);
     } else {
