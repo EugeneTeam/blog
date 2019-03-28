@@ -64,13 +64,7 @@ app.get('/article/:id', (req, res) => {
             res.status(404);
             res.send('Not found');
         } else {
-            const json = await models.Comment.getCommentsTree(article.id, null);
-            if (json) {
-                for (const element of json) {
-                    await structureJson(element, 0, json.length, models.Comment, article.id);
-                }
-                article.Comments = json;
-            }
+            article.Comments = await models.Comment.getCommentsTree(article.id, null);
             res.json(article);
         }
     }).catch(e => {
@@ -79,18 +73,6 @@ app.get('/article/:id', (req, res) => {
         res.send("Server Error");
     });
 });
-async function structureJson(nullElement, i, max, model, id) {
-    if (i >= max) {
-        return;
-    }
-    let temp = await model.getCommentsTree(id, nullElement.id)
-    if (temp != undefined) {
-        nullElement.Comments = temp;
-        return await structureJson(nullElement.Comments[i], 0, nullElement.Comments.length, model, id)
-    } else {
-        return await structureJson(nullElement, ++i, max, model, id)
-    }
-}
 app.post('/comment', (req, res) => {
     if (!req.body) {
         res.status(500);

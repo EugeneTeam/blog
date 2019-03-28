@@ -35,12 +35,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         raw: true
       });
-      if (comments.length !== 0) {
+      if (!comments.length) {
         return comments;
       }
       for (const comment of comments) {
-        comment.Comments = await Comment.getCommentsTree(articleId, parentId)
+        comment.Comments = await Comment.getCommentsTree(articleId, comment.id)
       }
+      return comments;
     } catch (error) {
       new Error('--error from comment.js--');
     }
